@@ -41,6 +41,7 @@ func register(conn net.Conn) error {
 	if err != nil {
 		return err
 	}
+
 	if string(msg.Data) != "register ok" {
 		return errors.New("注册失败, " + string(msg.Data))
 	}
@@ -48,7 +49,7 @@ func register(conn net.Conn) error {
 
 }
 
-func (c *Client) Start() {
+func (c *Client) Start(ok chan struct{}) {
 	conn, err := net.Dial("tcp", ":"+c.serverPort)
 	if err != nil {
 		panic(err)
@@ -59,9 +60,11 @@ func (c *Client) Start() {
 	err = register(conn)
 
 	if err != nil {
+		conn.Close()
 		panic(err)
 	}
-
+	c.conn = conn
+	ok <- struct{}{}
 	go keepalive(conn)
 	for {
 		msg, _ := ReadMsg(conn)

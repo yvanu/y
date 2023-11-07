@@ -46,14 +46,14 @@ func ReadMsg(conn net.Conn) (*Msg, error) {
 	header := make([]byte, 12)
 	_, err := conn.Read(header)
 	if err != nil {
-		if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-			fmt.Println("读取超时，关闭链接")
-			return nil, err
-		}
-		if err == io.EOF {
-			fmt.Println("对端关闭链接")
-			return nil, err
-		}
+		//if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+		//	fmt.Println("读取超时，关闭链接")
+		//	return nil, err
+		//}
+		//if err == io.EOF {
+		//	fmt.Println("对端关闭链接")
+		//	return nil, err
+		//}
 		return nil, err
 	}
 	msg, err = DefaultDataPack.UnPack(header)
