@@ -14,8 +14,6 @@ import (
 const (
 	BeatPacket = iota + 0x80000001
 	RegisPacket
-
-	PingPacket
 )
 
 type Msg struct {
